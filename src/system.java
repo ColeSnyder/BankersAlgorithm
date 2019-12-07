@@ -24,10 +24,10 @@ public class system extends Thread
 	int resource = 0;
 
 	int degree = 0;
-
  
 	int counter = 0;
 
+	boolean done;
 
 	public void run(){
 
@@ -102,7 +102,7 @@ public class system extends Thread
 	}
 	
 	public boolean isDone() {
-		boolean done = true;
+		done = true;
 		jobArray.forEach((n) -> {
 			done = done && n.isDone();
 		});
