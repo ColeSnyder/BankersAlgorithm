@@ -31,11 +31,6 @@ public class bankers {
 			while(true) {
 				for (pcb job : tempJobs) { //Go through all of the jobs
 					if(job.needsAlloc()) { //If the Job needs allocated aka not finished
-						
-						
-						System.out.println(job.getAllocLeft()); // test this 
-						
-						
 						if(job.getAllocLeft() <= testFreeMem) { //Job was able to finish with what free memory is left
 							freedMemory = true;
 							testFreeMem += job.getTotalAlloc();

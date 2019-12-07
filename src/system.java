@@ -13,8 +13,6 @@ public class system extends Thread
 
 
 	ArrayList<pcb> jobArray = new ArrayList<pcb>();
-
-
 	systhread[] threadArray;
 
 	int processcount;
@@ -22,7 +20,6 @@ public class system extends Thread
 	semaphore cpuSem, resourceSem;
 
 	clock sysclock;
- 
 
 	int resource = 0;
 
@@ -32,8 +29,7 @@ public class system extends Thread
 	int counter = 0;
 
 
-
-	public void run() {
+	public void run(){
 
 
 		cpuSem = new semaphore(1);
@@ -74,12 +70,11 @@ public class system extends Thread
 
 
 			int[] jobInfo = Arrays.stream(info.trim().split(" ")).mapToInt(Integer::parseInt).toArray();
-
-
+			
 			jobArray.add(new pcb(jobName, jobInfo, sysclock, cpuSem, resourceSem));
 
 		}
-
+		
 
 		System.out.println("Time Requesting In Out");
 
@@ -96,7 +91,23 @@ public class system extends Thread
 
 		});
 
-
+	}
+	
+	public ArrayList<pcb> getJobs(){
+		return jobArray;
+	}
+	
+	public int getFreeMemory() {
+		return resource;
+	}
+	
+	public boolean isDone() {
+		boolean done = true;
+		jobArray.forEach((n) -> {
+			done = done && n.isDone();
+		});
+		return done;
+		
 	}
 
 }
