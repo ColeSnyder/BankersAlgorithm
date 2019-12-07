@@ -1,7 +1,5 @@
 import java.util.*;
 
-
-
 public class pcb {
 	
 	String myName; 
@@ -13,6 +11,8 @@ public class pcb {
 	int[] myNeeds;
 	
 	boolean isDone;
+	
+	int totalAlloc;
 
 	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem)
 
@@ -52,10 +52,20 @@ public class pcb {
 		return isDone;
 	}
 	
+	public boolean needsAlloc() {
+		if (isDone == false) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
-	
-	
-
-
+	public int getTotalAlloc() {
+		
+		
+		
+		
+		return totalAlloc;
+	}
 
 }
