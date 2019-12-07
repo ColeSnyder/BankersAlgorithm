@@ -1,7 +1,7 @@
 
 public class bankers {
 	
-	system mySystem;
+	static system mySystem;
 	
 	public bankers(system mySystem) {
 		this.mySystem = mySystem;
@@ -32,8 +32,9 @@ public class bankers {
 				for (pcb job : tempJobs) { //Go through all of the jobs
 					if(job.needsAlloc()) { //If the Job needs allocated aka not finished
 						if(job.getAllocLeft() <= testFreeMem) { //Job was able to finish with what free memory is left
+							System.out.println(job);
 							freedMemory = true;
-							testFreeMem += job.getTotalAlloc();
+							testFreeMem += mySystem.totalJobAlloc;
 							job.done();
 						}
 					}

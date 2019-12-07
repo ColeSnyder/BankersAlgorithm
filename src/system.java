@@ -11,7 +11,6 @@ public class system extends Thread
 
 {
 
-
 	ArrayList<pcb> jobArray = new ArrayList<pcb>();
 	systhread[] threadArray;
 
@@ -29,6 +28,8 @@ public class system extends Thread
 
 	boolean done;
 
+	int totalJobAlloc = 0;
+	
 	public void run(){
 
 
@@ -49,9 +50,7 @@ public class system extends Thread
 
 
 		String jobName;
-
 		String info;
-
 
 		resource = scan.nextInt();
 
@@ -60,34 +59,30 @@ public class system extends Thread
 
 		while (scan.hasNextLine()) {
 
-
 			jobName = scan.next();
-
 			info = scan.nextLine();
 
-
-			System.out.println(info);
-
-
 			int[] jobInfo = Arrays.stream(info.trim().split(" ")).mapToInt(Integer::parseInt).toArray();
+			
+			for(int i = 1; i < jobInfo.length; i+=2) {
+				totalJobAlloc += jobInfo[i];
+			}
 			
 			jobArray.add(new pcb(jobName, jobInfo, sysclock, cpuSem, resourceSem));
 
 		}
-		
 
 		System.out.println("Time Requesting In Out");
-
 		System.out.println("");
-
+		
 
 		threadArray = new systhread[jobArray.size()];
 
 		jobArray.forEach((n) -> {
 
-			threadArray[counter++] = new systhread(n);
+		threadArray[counter++] = new systhread(n);
 
-			threadArray[counter - 1].start();
+		threadArray[counter - 1].start();
 
 		});
 

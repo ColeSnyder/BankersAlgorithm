@@ -12,8 +12,6 @@ public class pcb {
 	
 	boolean isDone;
 	
-	int totalAlloc;
-
 	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem)
 
 	{
@@ -58,14 +56,6 @@ public class pcb {
 		} else {
 			return true;
 		}
-	}
-	
-	public int getTotalAlloc() {
-		
-		
-		
-		
-		return totalAlloc;
 	}
 
 }
