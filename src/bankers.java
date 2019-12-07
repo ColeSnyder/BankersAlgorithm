@@ -1,7 +1,7 @@
 
 public class bankers {
 	
-	static system mySystem;
+	system mySystem;
 	
 	public bankers(system mySystem) {
 		this.mySystem = mySystem;
@@ -34,7 +34,7 @@ public class bankers {
 						if(job.getAllocLeft() <= testFreeMem) { //Job was able to finish with what free memory is left
 							System.out.println(job);
 							freedMemory = true;
-							testFreeMem += mySystem.totalJobAlloc;
+							testFreeMem += job.totalJobAlloc();
 							job.done();
 						}
 					}

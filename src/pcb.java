@@ -12,6 +12,8 @@ public class pcb {
 	
 	boolean isDone;
 	
+	int totalAllocForJob = 0;
+	
 	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem)
 
 	{
@@ -39,7 +41,19 @@ public class pcb {
 			PageAllocatetionLeft += myNeeds[i];
 		}
 		
+		//here we need to have a way to take out or remove job resources when it's completed
+		
 		return PageAllocatetionLeft;
+	}
+	
+	public int totalJobAlloc() {
+		int jobResourceAllocatetion = 0;
+		
+		for (int i = 1; i < myNeeds.length; i+=2 ) {
+			totalAllocForJob += myNeeds[i];
+		}
+		
+		return jobResourceAllocatetion;
 	}
 	
 	public void done() {
