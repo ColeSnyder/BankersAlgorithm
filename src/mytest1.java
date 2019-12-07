@@ -10,7 +10,6 @@ public class mytest1 {
 		// TODO Auto-generated method stub
 		
 		system S = new system();
-		S.readFile();
 		S.start();
 
 	}
