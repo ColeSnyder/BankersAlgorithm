@@ -1,21 +1,45 @@
 import java.util.*;
 
 
+
 public class pcb {
 
-	public pcb(int count, int cs, int out, clock gclock, semaphore gsem)
+
+	public pcb(String name, int[] cpu_pages, clock gclock, semaphore csem, semaphore rsem)
+
 	{
-		cstime = cs;
-		outsidetime = out;
-		pid = count;
+
+		myName = name;
+
 		myclock = gclock;
-		mysemaphore = gsem;
+
+		mycpusemaphore = csem;
+
+		myresourcesemaphore = rsem;
+
+		myNeeds = cpu_pages;
+
 	}
-	
-	
-	int pid;
-	int cstime, outsidetime;
+
+
+
+	String myName;
+
+	// int cstime, outsidetime;
+
 	clock myclock;
-	semaphore mysemaphore;
+
+	semaphore mycpusemaphore, myresourcesemaphore;
+
+	int[] myNeeds;
+
+
+	public String toString() {
+
+		return myName;
+
+	}
+
+
 
 }
