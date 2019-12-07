@@ -44,18 +44,14 @@ public class system extends Thread
 		try {
 			scan = new Scanner(new File("jobs.dat"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 
 		String jobName;
 		String info;
 
 		resource = scan.nextInt();
-
 		degree = scan.nextInt();
-
 
 		while (scan.hasNextLine()) {
 
@@ -74,7 +70,6 @@ public class system extends Thread
 
 		System.out.println("Time Requesting In Out");
 		System.out.println("");
-		
 
 		threadArray = new systhread[jobArray.size()];
 

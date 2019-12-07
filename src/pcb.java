@@ -51,11 +51,7 @@ public class pcb {
 	}
 	
 	public boolean needsAlloc() {
-		if (isDone == false) {
-			return false;
-		} else {
-			return true;
-		}
+		return isDone;
 	}
 
 }
