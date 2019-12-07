@@ -13,7 +13,7 @@ public class system extends Thread
 			System.out.println("Hello system is starting " + sysclock.getTime());
 
 			
-			p1 = new pcb(processcount, 50, 100,sysclock, cpu); 
+			p1 = new pcb(processcount, 50, 100,sysclock, cpu);
 			m1 = new systhread(p1);
 			processcount++;
 		
