@@ -40,6 +40,26 @@ public class systhread extends Thread
 
 			System.out.println(mypcb.myclock.getTime() + "                 "+ mypcb.myName);
 
+			//We can now use the CPU!!
+			
+			try {
+				sleep(mypcb.cpuBurst());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			//After it does its CPU burst it needs to do allocation!!
+			
+			//Check if it is done first though
+			
+			if(mypcb.isDone()) {
+				//tis done not sure what to do with it now
+			}
+			else {
+				bankers.BankersCheck(mypcb.getRequest());
+			}
+			
+			
 
 			// try {sleep(mypcb.cstime);}catch(InterruptedException e) {}
 
