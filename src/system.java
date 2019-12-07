@@ -22,104 +22,34 @@ public class system extends Thread
 	semaphore cpuSem, resourceSem;
 
 	clock sysclock;
-
+ 
 
 	int resource = 0;
 
 	int degree = 0;
 
-
+ 
 	int counter = 0;
 
 
-	public void run()
 
-	{
-
-
-		// cpu = new semaphore(1);
-
-		// processcount = 1;
-
-		// sysclock = new clock();
-
-		//
-
-		// System.out.println("Hello system is starting " + sysclock.getTime());
-
-
-
-		// p1 = new pcb(processcount, 50, 100, sysclock, cpu); 
-
-		// m1 = new systhread(p1);
-
-		// processcount++;
-
-		//
-
-		// p2 = new pcb(processcount, 20, 500,sysclock, cpu); 
-
-		// m2 = new systhread(p2); 
-
-		// processcount++;
-
-		//
-
-		// p3 = new pcb(processcount, 100, 500,sysclock, cpu); 
-
-		// m3 = new systhread(p3);
-
-		// processcount++;
-
-		//
-
-		//
-
-		// p4 = new pcb(processcount, 30, 30,sysclock, cpu); 
-
-		// m4 = new systhread(p4);
-
-		// processcount++;
-
-
-		// System.out.println("Time Requesting In Out");
-
-		// System.out.println("");
-
-		//
-
-		// m1.start();
-
-		// m2.start();
-
-		// m3.start();
-
-		// m4.start();
-
-
-
-
-	}
-
-
-
-	public void readFile() throws FileNotFoundException {
+	public void run() {
 
 
 		cpuSem = new semaphore(1);
-
 		resourceSem = new semaphore(1);
-
-
-		// processcount = 1;
-
 		sysclock = new clock();
-
 
 		System.out.println("Hello system is starting " + sysclock.getTime());
 
 
-		Scanner scan = new Scanner(new File("jobs.dat"));
+		Scanner scan = null;
+		try {
+			scan = new Scanner(new File("jobs.dat"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 
 		String jobName;
@@ -148,13 +78,6 @@ public class system extends Thread
 
 			jobArray.add(new pcb(jobName, jobInfo, sysclock, cpuSem, resourceSem));
 
-
-			// pcb p1 = new pcb(jobName, jobInfo, sysclock, cpuSem, resourceSem);
-
-			// m1 = new systhread(p1);
-
-
-
 		}
 
 
@@ -174,21 +97,6 @@ public class system extends Thread
 		});
 
 
-		// m1 = new systhread(p1);     after arraylist is all done, run through each one and do this
-
-
-
-		// m1.start();
-
-		// m2.start();
-
-		// m3.start();
-
-		// m4.start();
-
-
-
 	}
-
 
 }

@@ -3,9 +3,18 @@ import java.util.*;
 
 
 public class pcb {
+	
+	String myName; 
 
+	clock myclock;
 
-	public pcb(String name, int[] cpu_pages, clock gclock, semaphore csem, semaphore rsem)
+	semaphore mycpusemaphore, myresourcesemaphore;
+
+	int[] myNeeds;
+	
+	boolean isDone;
+
+	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem)
 
 	{
 
@@ -17,28 +26,33 @@ public class pcb {
 
 		myresourcesemaphore = rsem;
 
-		myNeeds = cpu_pages;
+		myNeeds = jobDescription;
 
 	}
-
-
-
-	String myName;
-
-	// int cstime, outsidetime;
-
-	clock myclock;
-
-	semaphore mycpusemaphore, myresourcesemaphore;
-
-	int[] myNeeds;
-
 
 	public String toString() {
-
 		return myName;
-
+	} 
+	
+	public int getAllocLeft() {
+		int PageAllocatetionLeft = 0;
+		
+		for (int i = 1; i < myNeeds.length; i+=2 ) {
+			PageAllocatetionLeft += myNeeds[i];
+		}
+		
+		return PageAllocatetionLeft;
 	}
+	
+	public void done() {
+		isDone = true; 
+	}
+	
+	public boolean isDone() {
+		return isDone;
+	}
+	
+	
 
 
 
