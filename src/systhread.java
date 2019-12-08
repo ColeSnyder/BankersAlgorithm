@@ -3,6 +3,7 @@ public class systhread extends Thread {
 
 	pcb mypcb;
 
+	semaphore mymultiprogrammingsemaphore;
 
 	public systhread(pcb p){
 		mypcb = p;
@@ -11,7 +12,6 @@ public class systhread extends Thread {
 
 
 	public void run() {
-
 
 		while(!mypcb.isDone())
 
