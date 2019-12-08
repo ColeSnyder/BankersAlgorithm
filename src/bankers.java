@@ -7,17 +7,19 @@ public class bankers {
 		bankers.mySystem = mySystem;
 	}
 		
-	public static boolean BankersCheck(int allocReq) {
+	public static boolean BankersCheck(int allocReq,pcb jobx) {
 		pcb[] jobs = mySystem.getJobs().toArray(new pcb[mySystem.getJobs().size()]);;
 		int freeMem = mySystem.getFreeMemory();
 		pcb[] tempJobs = new pcb[jobs.length];
 		System.arraycopy(jobs, 0, tempJobs, 0, jobs.length);
 		
+		
 		if(freeMem < allocReq) {
+			//System.out.println("Denied: Not enough available: Wait");
 			return false; //Not enough free memory to request that
 		}
 		else {
-			int testFreeMem = freeMem - allocReq;
+			int testFreeMem = freeMem;
 			boolean freedMemory = false;
 			
 			while(true) {
@@ -27,7 +29,7 @@ public class bankers {
 						if(job.needsAlloc()) { //If the Job needs allocated aka not finished
 							if(job.getAllocLeft() <= testFreeMem) { //Job was able to finish with what free memory is left
 								freedMemory = true;
-								testFreeMem += job.getAllocLeft();
+								testFreeMem += job.getAllocLeft()+job.totalAllocForJob;
 								job.done();
 							}
 						}
@@ -37,6 +39,11 @@ public class bankers {
 				}
 				
 				if(!freedMemory) {
+					//Stuck loopin here
+					for(pcb job : tempJobs) {
+						job.unDone();
+					}
+					//System.out.println("Request by Job "+jobx.myName+" Denied: UNSAFE: Wait    ");
 					return false; //No job could be finished with this loop
 				}
 				else {
@@ -45,6 +52,9 @@ public class bankers {
 						complete = complete && job.isDone;
 					}
 					if(complete) {
+						for(pcb job : tempJobs) {
+							job.unDone();
+						}
 						return true; //All jobs were able to be finished
 					}
 					else {

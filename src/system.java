@@ -101,6 +101,7 @@ public class system extends Thread
 	
 	public static synchronized void allocate(pcb job) {
 		int allocated = job.popNeed();
+		job.totalAllocForJob += allocated;
 		resource -= allocated;
 	}
 

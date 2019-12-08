@@ -3,15 +3,10 @@ import java.util.Arrays;
 public class pcb {
 	
 	String myName; 
-
 	clock myclock;
-
 	semaphore mycpusemaphore, myresourcesemaphore;
-
 	int[] myNeeds;
-	
 	boolean isDone;
-	
 	int totalAllocForJob = 0;
 	
 	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem)
@@ -59,15 +54,30 @@ public class pcb {
 	public int getAllocLeft() {//When this is called the CPU burst was just popped so the allocation would actually be on the even 
 		int allocLeft = 0;
 		
-		for (int i = 0; i < myNeeds.length; i+=2 ) {
-			allocLeft += myNeeds[i];
+		if(myNeeds.length % 2 == 0) { //Even amount so next is allocation
+			for (int i = 0; i < myNeeds.length; i+=2 ) {
+				allocLeft += myNeeds[i];
+			}
 		}
+		else { //Odd amount so next is CPU burst
+			for (int i = 1; i < myNeeds.length; i+=2 ) {
+				allocLeft += myNeeds[i];
+			}
+		}
+		
+		
 		
 		return allocLeft;
 	}
 	
+	
+	
 	public void done() {
 		isDone = true;
+	}
+	
+	public void unDone() {
+		isDone = false;
 	}
 	
 	public boolean isDone() {
