@@ -36,8 +36,8 @@ public class system extends Thread
 		cpuSem = new semaphore(1);
 		resourceSem = new semaphore(1);
 		sysclock = new clock();
-
-		System.out.println("System is starting " + sysclock.getTime());
+		resourceSem.value--;
+		
 
 
 		Scanner scan = null;
@@ -68,9 +68,12 @@ public class system extends Thread
 
 		}
 
-		System.out.println("");
+		
 
 		threadArray = new systhread[jobArray.size()];
+		
+		System.out.println("System ("+system.resource+")\t"+ sysclock.getTime());
+		System.out.println("");
 
 		jobArray.forEach((n) -> {
 

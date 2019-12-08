@@ -8,11 +8,12 @@ public class pcb {
 	int[] myNeeds;
 	boolean isDone;
 	int totalAllocForJob = 0;
+	boolean finished;
 	
 	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem)
 
 	{
-
+		finished = false;
 		myName = name;
 
 		myclock = gclock;
@@ -78,6 +79,10 @@ public class pcb {
 	
 	public void unDone() {
 		isDone = false;
+	}
+	
+	public boolean finished() {
+		return finished;
 	}
 	
 	public boolean isDone() {

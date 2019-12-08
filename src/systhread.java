@@ -16,13 +16,20 @@ public class systhread extends Thread {
 		while(!mypcb.isDone())
 
 		{
+			
 			mypcb.mycpusemaphore.Wait(); //Wait for allowed CPU time
 			System.out.println("Job "+mypcb.myName+" is running \t"+ mypcb.myclock.getTime());
-			try {
-				Thread.sleep(mypcb.popNeed());//Pop the first element of the desc array which has to be the CPU burst
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if(mypcb.myNeeds.length % 2 == 0) {
+				
 			}
+			else {
+				try {
+					Thread.sleep(mypcb.popNeed());//Pop the first element of the desc array which has to be the CPU burst
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
 			//Waited for CPU burst time while holding semaphore
 			
 			
@@ -32,10 +39,14 @@ public class systhread extends Thread {
 			if(mypcb.isDone()) {
 				
 				System.out.println("Job "+mypcb.myName+" Done \t"+mypcb.myclock.getTime());
-				mypcb.mycpusemaphore.Signal(); //Signal and this is done!
+				
 				system.resource += mypcb.totalAllocForJob;
-				mypcb.done();
 				System.out.println("System ("+system.resource+")");
+				mypcb.done();
+				
+				mypcb.finished = true;
+				mypcb.mycpusemaphore.Signal(); //Signal and this is done!
+				mypcb.myresourcesemaphore.Signal();
 				this.stop();
 			}
 			else {
@@ -50,21 +61,30 @@ public class systhread extends Thread {
 					mypcb.mycpusemaphore.Signal(); //Release CPU!!!! Let someone else get it and don't be greedy
 				}
 				else {
-					mypcb.mycpusemaphore.Signal(); //Release CPU!!!! Let someone else get it and don't be greedy
+					 //Release CPU!!!! Let someone else get it and don't be greedy
 					
-					while(!bankers.BankersCheck(mypcb.getNext(),mypcb)) {
+					while(true) {
+						
+						mypcb.mycpusemaphore.Signal();
 						mypcb.myresourcesemaphore.Wait();
 						
-						
 						if(bankers.BankersCheck(mypcb.getNext(),mypcb)) {
-							System.out.println("Allocated ("+mypcb.getNext()+"): Remaining ("+(mypcb.getAllocLeft()-mypcb.getNext())+"): System ("+(system.resource-mypcb.getNext())+")");
+							System.out.println("Request by Job "+mypcb.myName+" allocated ("+mypcb.getNext()+"): Remaining ("+(mypcb.getAllocLeft()-mypcb.getNext())+"): System ("+(system.resource-mypcb.getNext())+")");
 							system.allocate(mypcb);
-							mypcb.myresourcesemaphore.Signal();
 							break;
 						}
+						else {
+							mypcb.myresourcesemaphore.Signal();
+							mypcb.mycpusemaphore.Signal();
+							
+							
+							mypcb.myresourcesemaphore.Wait();
+						}
 						
-						mypcb.myresourcesemaphore.Signal();
+
 					}
+					mypcb.mycpusemaphore.Signal();
+					
 					
 					
 				}
