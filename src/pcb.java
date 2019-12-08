@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Arrays;
 
 public class pcb {
 	
@@ -29,43 +29,53 @@ public class pcb {
 		myNeeds = jobDescription;
 
 	}
+	
+	public int getNext() {
+		return myNeeds[0];
+	}
+	
+	public int popNeed() {
+		int popped = myNeeds[0];
+		int[] temp = new int[myNeeds.length-1];
+		
+		if(myNeeds.length == 1) {
+			myNeeds = new int[0];
+		}
+		else {
+			for(int i = 0; i < myNeeds.length - 1; i++){
+	            temp[i] = myNeeds[i+1];
+	        }
+		}
+		
+		myNeeds = temp;
+		
+		return popped;
+	}
 
 	public String toString() {
 		return myName;
-	} 
-	
-	public int getAllocLeft() {
-		int PageAllocatetionLeft = 0;
-		
-		for (int i = 1; i < myNeeds.length; i+=2 ) {
-			PageAllocatetionLeft += myNeeds[i];
-		}
-		
-		//here we need to have a way to take out or remove job resources when it's completed
-		
-		return PageAllocatetionLeft;
 	}
 	
-	public int totalJobAlloc() {
-		int jobResourceAllocatetion = 0;
+	public int getAllocLeft() {//When this is called the CPU burst was just popped so the allocation would actually be on the even 
+		int allocLeft = 0;
 		
-		for (int i = 1; i < myNeeds.length; i+=2 ) {
-			totalAllocForJob += myNeeds[i];
+		for (int i = 0; i < myNeeds.length; i+=2 ) {
+			allocLeft += myNeeds[i];
 		}
 		
-		return jobResourceAllocatetion;
+		return allocLeft;
 	}
 	
 	public void done() {
-		isDone = true; 
+		isDone = true;
 	}
 	
 	public boolean isDone() {
-		return isDone;
+		return myNeeds.length <= 0;
 	}
 	
-	public boolean needsAlloc() {
-		return isDone;
+	public boolean needsAlloc() { 
+		return getAllocLeft() > 0;
 	}
 
 }

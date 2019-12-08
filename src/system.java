@@ -20,7 +20,7 @@ public class system extends Thread
 
 	clock sysclock;
 
-	int resource = 0;
+	static int resource = 0;
 
 	int degree = 0;
  
@@ -37,7 +37,7 @@ public class system extends Thread
 		resourceSem = new semaphore(1);
 		sysclock = new clock();
 
-		System.out.println("Hello system is starting " + sysclock.getTime());
+		System.out.println("System is starting " + sysclock.getTime());
 
 
 		Scanner scan = null;
@@ -68,7 +68,6 @@ public class system extends Thread
 
 		}
 
-		System.out.println("Time Requesting In Out");
 		System.out.println("");
 
 		threadArray = new systhread[jobArray.size()];
@@ -98,6 +97,11 @@ public class system extends Thread
 		});
 		return done;
 		
+	}
+	
+	public static synchronized void allocate(pcb job) {
+		int allocated = job.popNeed();
+		resource -= allocated;
 	}
 
 }

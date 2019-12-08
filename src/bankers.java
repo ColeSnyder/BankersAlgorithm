@@ -1,16 +1,16 @@
 
 public class bankers {
 	
-	system mySystem;
+	static system mySystem;
 	
 	public bankers(system mySystem) {
-		this.mySystem = mySystem;
+		bankers.mySystem = mySystem;
 	}
 		
 	public static boolean BankersCheck(int allocReq) {
-		pcb[] jobs = (pcb[]) mySystem.getJobs().toArray();
+		pcb[] jobs = mySystem.getJobs().toArray(new pcb[mySystem.getJobs().size()]);;
 		int freeMem = mySystem.getFreeMemory();
-		pcb[] tempJobs;
+		pcb[] tempJobs = new pcb[jobs.length];
 		System.arraycopy(jobs, 0, tempJobs, 0, jobs.length);
 		
 		if(freeMem < allocReq) {
@@ -21,15 +21,18 @@ public class bankers {
 			boolean freedMemory = false;
 			
 			while(true) {
+				
 				for (pcb job : tempJobs) { //Go through all of the jobs
-					if(job.needsAlloc()) { //If the Job needs allocated aka not finished
-						if(job.getAllocLeft() <= testFreeMem) { //Job was able to finish with what free memory is left
-							System.out.println(job);
-							freedMemory = true;
-							testFreeMem += job.totalJobAlloc();
-							job.done();
+					if(!job.isDone) {
+						if(job.needsAlloc()) { //If the Job needs allocated aka not finished
+							if(job.getAllocLeft() <= testFreeMem) { //Job was able to finish with what free memory is left
+								freedMemory = true;
+								testFreeMem += job.getAllocLeft();
+								job.done();
+							}
 						}
 					}
+					
 
 				}
 				
@@ -37,8 +40,11 @@ public class bankers {
 					return false; //No job could be finished with this loop
 				}
 				else {
-					
-					if(tempJobs.isDone()) {
+					boolean complete = true;
+					for (pcb job : tempJobs) {
+						complete = complete && job.isDone;
+					}
+					if(complete) {
 						return true; //All jobs were able to be finished
 					}
 					else {
@@ -48,8 +54,8 @@ public class bankers {
 				
 			}
 			
-		}		
-		return false;
+		}	
+		
 	}
 	
 	

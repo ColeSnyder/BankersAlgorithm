@@ -1,75 +1,78 @@
-import java.util.*;
 
-
-public class systhread extends Thread
-
-{
+public class systhread extends Thread {
 
 	pcb mypcb;
 
 
-	public systhread(pcb p)
-
-	{
-
+	public systhread(pcb p){
 		mypcb = p;
-
-
-		System.out.println("Process # " + mypcb.myName + ": Starting at " + mypcb.myclock.getTime());
-
-
+		System.out.println("Job " + mypcb.myName + ": Starting at " + mypcb.myclock.getTime());
 	}
 
 
-	public void run()
-
-	{
+	public void run() {
 
 
-		while(true)
+		while(!mypcb.isDone())
 
 		{
 
-			long t;
-
-
-			System.out.println(mypcb.myclock.getTime() + " "+ mypcb.myName );
-
-
-			mypcb.mycpusemaphore.Wait();
-
-			System.out.println(mypcb.myclock.getTime() + "                 "+ mypcb.myName);
-
-			//We can now use the CPU!!
-			
+			mypcb.mycpusemaphore.Wait(); //Wait for allowed CPU time
+			System.out.println("Job "+mypcb.myName+" is running \t"+ mypcb.myclock.getTime());
 			try {
-				sleep(mypcb.cpuBurst());//Pop description too or whatever
+				Thread.sleep(mypcb.popNeed());//Pop the first element of the desc array which has to be the CPU burst
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			//Waited for CPU burst time while holding semaphore
+			
+			
 
 			//After it does its CPU burst it needs to do allocation!!
 			//Check if it is done first though
-			
 			if(mypcb.isDone()) {
-				//tis done not sure what to do with it now
+				
+				System.out.println("Job "+mypcb.myName+" Done \t"+mypcb.myclock.getTime());
+				mypcb.mycpusemaphore.Signal(); //Signal and this is done!
+				this.stop();
 			}
 			else {
+				System.out.println("Job "+mypcb.myName+" needs resource \t"+mypcb.myclock.getTime());
+				int allocated = 0;
 				
-				if(bankers.BankersCheck(mypcb.getRequest())) {//Able to get some resources!
-					mypcb.popDescTingy();
+				if(bankers.BankersCheck(mypcb.getNext())) {//Able to get some resources!
+					System.out.println("Allocated ("+mypcb.getNext()+"): Remaining ("+(mypcb.getAllocLeft()-mypcb.getNext())+"): System ("+(system.resource-mypcb.getNext())+")");
+					system.allocate(mypcb);
+					
 					//Handle whatever needs to happen here.
 					//Like some more stuff
 					
 					mypcb.mycpusemaphore.Signal(); //Release CPU!!!! Let someone else get it and don't be greedy
 				}
 				else {
+					System.out.println("Am I stuck here?");
 					mypcb.mycpusemaphore.Signal(); //Release CPU!!!! Let someone else get it and don't be greedy
 					
-					mypcb.myresourcesemaphore.Wait();
+					while(!bankers.BankersCheck(mypcb.getNext())) {
+						mypcb.myresourcesemaphore.Wait();
+						
+						if(bankers.BankersCheck(mypcb.getNext())) {
+							system.allocate(mypcb);
+							mypcb.myresourcesemaphore.Signal();
+							break;
+						}
+						
+						mypcb.myresourcesemaphore.Signal();
+					}
+					
+					
+					system.allocate(mypcb);
+					
+					mypcb.myresourcesemaphore.Signal();
+					
 					//This is it cannot allocate and it needs to wait for resources
 					
-					mypcb.popDescTingy();
+
 					//Handle whatever needs to happen here.
 					//Like some more stuff
 					
