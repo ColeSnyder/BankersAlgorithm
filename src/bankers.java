@@ -6,18 +6,10 @@ public class bankers {
 	public bankers(system mySystem) {
 		this.mySystem = mySystem;
 	}
-	
-	public void allocRequest(pcb job, int allocReq) {
-		if(BanekrsCheck(mySystem.getJobs(), mySystem.getFreeMemory(), allocReq)) {
-			job.allocate(); //After resource is allocated probably should check if anything freed up
-			checkWaiting(); //This is checking if freed up and possibly should let someone waiting on semaphore back in!!
-		}
-		else {
-			job.resourceWait();//Wait on the resource Sem
-		}
-	}
 		
-	public static boolean BankersCheck(pcb[] jobs, int freeMem, int allocReq) {
+	public static boolean BankersCheck(int allocReq) {
+		pcb[] jobs = (pcb[]) mySystem.getJobs().toArray();
+		int freeMem = mySystem.getFreeMemory();
 		pcb[] tempJobs;
 		System.arraycopy(jobs, 0, tempJobs, 0, jobs.length);
 		
