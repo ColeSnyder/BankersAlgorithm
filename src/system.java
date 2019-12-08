@@ -37,9 +37,9 @@ public class system extends Thread
 
 		cpuSem = new semaphore(1);
 		resourceSem = new semaphore(1);
-		multiprosem = new semaphore(1);
 		sysclock = new clock();
 		resourceSem.value--;
+		
 		
 
 		Scanner scan = null;
@@ -54,7 +54,7 @@ public class system extends Thread
 
 		resource = scan.nextInt();
 		degree = scan.nextInt();
-
+		multiprosem = new semaphore(degree);
 		while (scan.hasNextLine()) {
 
 			jobName = scan.next();
@@ -78,36 +78,22 @@ public class system extends Thread
 		System.out.println("");
 		System.out.println("");
 		
-		if (degree > jobArray.size()) {
 			
-			threadArray = new systhread[jobArray.size()];
+		threadArray = new systhread[jobArray.size()];
 
-			jobArray.forEach((n) -> {
+		jobArray.forEach((n) -> {
 
-			threadArray[counter++] = new systhread(n);
+		threadArray[counter++] = new systhread(n);
 
 			threadArray[counter - 1].start();
+			try {
+				Thread.sleep(1); //Used to keep them in order
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 			
-			});
-			
-		} else {
-			
-			threadArray = new systhread[jobArray.size()];
-			
-			jobArray.forEach((n) -> {
-
-				if (multicounter < degree) {
-				
-					threadArray[counter++] = new systhread(n);
-
-					threadArray[counter - 1].start();
-					multicounter++;
-								
-				}
-			
-			});
-			
-		}
 
 	}
 	

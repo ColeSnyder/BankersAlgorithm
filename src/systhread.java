@@ -7,15 +7,17 @@ public class systhread extends Thread {
 
 	public systhread(pcb p){
 		mypcb = p;
-		System.out.println("Job " + mypcb.myName + ": Starting at " + mypcb.myclock.getTime());
+		
 	}
 
-
 	public void run() {
-
+		
+		mypcb.mymultiprogrammingsem.Wait();
+		System.out.println("Job " + mypcb.myName + ": Starting at " + mypcb.myclock.getTime());
 		while(!mypcb.isDone())
 
 		{
+			
 			mypcb.mycpusemaphore.Wait(); //Wait for allowed CPU time
 			System.out.println("Job "+mypcb.myName+" is running \t"+ mypcb.myclock.getTime());
 			if(mypcb.myNeeds.length % 2 == 0) {
@@ -46,6 +48,7 @@ public class systhread extends Thread {
 				mypcb.finished = true;
 				mypcb.mycpusemaphore.Signal(); //Signal and this is done!
 				mypcb.myresourcesemaphore.Signal();
+				mypcb.mymultiprogrammingsem.Signal();
 				this.stop();
 			}
 			else {
