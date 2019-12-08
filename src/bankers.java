@@ -15,7 +15,7 @@ public class bankers {
 		
 		
 		if(freeMem < allocReq) {
-			//System.out.println("Denied: Not enough available: Wait");
+			System.out.println("Denied: Not enough available: Wait");
 			return false; //Not enough free memory to request that
 		}
 		else {
@@ -48,7 +48,7 @@ public class bankers {
 					for(pcb job : tempJobs) {
 						job.unDone();
 					}
-					//System.out.println("Request by Job "+jobx.myName+" Denied: UNSAFE: Wait    ");
+					System.out.println("Request by Job "+jobx.myName+" Denied: UNSAFE: Wait    ");
 					return false; //No job could be finished with this loop
 				}
 				else {
