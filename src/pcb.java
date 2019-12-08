@@ -4,13 +4,13 @@ public class pcb {
 	
 	String myName; 
 	clock myclock;
-	semaphore mycpusemaphore, myresourcesemaphore;
+	semaphore mycpusemaphore, myresourcesemaphore, mymultiprogrammingsem;
 	int[] myNeeds;
 	boolean isDone;
 	int totalAllocForJob = 0;
 	boolean finished;
 	
-	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem)
+	public pcb(String name, int[] jobDescription, clock gclock, semaphore csem, semaphore rsem, semaphore msem)
 
 	{
 		finished = false;
@@ -21,6 +21,8 @@ public class pcb {
 		mycpusemaphore = csem;
 
 		myresourcesemaphore = rsem;
+		
+		mymultiprogrammingsem = msem;
 
 		myNeeds = jobDescription;
 

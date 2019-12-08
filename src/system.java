@@ -16,7 +16,7 @@ public class system extends Thread
 
 	int processcount;
 
-	semaphore cpuSem, resourceSem;
+	semaphore cpuSem, resourceSem, multiprosem;
 
 	clock sysclock;
 
@@ -30,15 +30,17 @@ public class system extends Thread
 
 	int totalJobAlloc = 0;
 	
+	int multicounter = 0;
+	
 	public void run(){
 
 
 		cpuSem = new semaphore(1);
 		resourceSem = new semaphore(1);
+		multiprosem = new semaphore(1);
 		sysclock = new clock();
 		resourceSem.value--;
 		
-
 
 		Scanner scan = null;
 		try {
@@ -64,24 +66,48 @@ public class system extends Thread
 				totalJobAlloc += jobInfo[i];
 			}
 			
-			jobArray.add(new pcb(jobName, jobInfo, sysclock, cpuSem, resourceSem));
+			jobArray.add(new pcb(jobName, jobInfo, sysclock, cpuSem, resourceSem, multiprosem));
 
 		}
 
 		
 
-		threadArray = new systhread[jobArray.size()];
+		// threadArray = new systhread[jobArray.size()];
 		
 		System.out.println("System ("+system.resource+")\t"+ sysclock.getTime());
 		System.out.println("");
+		System.out.println("");
+		
+		if (degree > jobArray.size()) {
+			
+			threadArray = new systhread[jobArray.size()];
 
-		jobArray.forEach((n) -> {
+			jobArray.forEach((n) -> {
 
-		threadArray[counter++] = new systhread(n);
+			threadArray[counter++] = new systhread(n);
 
-		threadArray[counter - 1].start();
+			threadArray[counter - 1].start();
+			
+			});
+			
+		} else {
+			
+			threadArray = new systhread[jobArray.size()];
+			
+			jobArray.forEach((n) -> {
 
-		});
+				if (multicounter < degree) {
+				
+					threadArray[counter++] = new systhread(n);
+
+					threadArray[counter - 1].start();
+					multicounter++;
+								
+				}
+			
+			});
+			
+		}
 
 	}
 	
