@@ -28,7 +28,7 @@ public class systhread extends Thread
 
 		while(true)
 
-		{ 
+		{
 
 			long t;
 
@@ -47,11 +47,8 @@ public class systhread extends Thread
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			
-			
+
 			//After it does its CPU burst it needs to do allocation!!
-			
 			//Check if it is done first though
 			
 			if(mypcb.isDone()) {
@@ -70,15 +67,13 @@ public class systhread extends Thread
 					mypcb.mycpusemaphore.Signal(); //Release CPU!!!! Let someone else get it and don't be greedy
 					
 					mypcb.myresourcesemaphore.Wait();
-					//This is it cannot allocate and it needs to wait for resourses
+					//This is it cannot allocate and it needs to wait for resources
 					
 					mypcb.popDescTingy();
 					//Handle whatever needs to happen here.
 					//Like some more stuff
 					
 					mypcb.myresourcesemaphore.Signal();
-					
-					
 					
 				}
 				
