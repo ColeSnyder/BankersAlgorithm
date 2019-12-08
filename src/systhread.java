@@ -16,7 +16,6 @@ public class systhread extends Thread {
 		while(!mypcb.isDone())
 
 		{
-
 			mypcb.mycpusemaphore.Wait(); //Wait for allowed CPU time
 			System.out.println("Job "+mypcb.myName+" is running \t"+ mypcb.myclock.getTime());
 			try {
@@ -40,7 +39,7 @@ public class systhread extends Thread {
 				this.stop();
 			}
 			else {
-				System.out.println("Job "+mypcb.myName+" needs resource\t"+mypcb.myclock.getTime());
+				System.out.println("Job "+mypcb.myName+" needs resource \t"+mypcb.getNext()+" "+mypcb.myclock.getTime());
 				int allocated = 0;
 				if(bankers.BankersCheck(mypcb.getNext(),mypcb)) {//Able to get some resources!
 					System.out.println("Allocated ("+mypcb.getNext()+"): Remaining ("+(mypcb.getAllocLeft()-mypcb.getNext())+"): System ("+(system.resource-mypcb.getNext())+")");
@@ -58,6 +57,7 @@ public class systhread extends Thread {
 						
 						
 						if(bankers.BankersCheck(mypcb.getNext(),mypcb)) {
+							System.out.println("Allocated ("+mypcb.getNext()+"): Remaining ("+(mypcb.getAllocLeft()-mypcb.getNext())+"): System ("+(system.resource-mypcb.getNext())+")");
 							system.allocate(mypcb);
 							mypcb.myresourcesemaphore.Signal();
 							break;
@@ -66,18 +66,6 @@ public class systhread extends Thread {
 						mypcb.myresourcesemaphore.Signal();
 					}
 					
-					
-					system.allocate(mypcb);
-					
-					mypcb.myresourcesemaphore.Signal();
-					
-					//This is it cannot allocate and it needs to wait for resources
-					
-
-					//Handle whatever needs to happen here.
-					//Like some more stuff
-					
-					mypcb.myresourcesemaphore.Signal();
 					
 				}
 				
